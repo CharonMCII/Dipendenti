@@ -1,0 +1,100 @@
+import java.util.Scanner;
+import java.util.*;
+import java.io.*;
+
+public class Main {
+    private static String FILE_PATH = "dipendenti.txt";
+
+    public static void main(String[] args) throws IOException {
+    	
+    	Scanner scanner = new Scanner(System.in);
+    	
+    	        Dipendente[] dipendenti = { 	
+            new Dipendente("Mario", "Rossi", "RSSMRA80A01F205A", 2000),
+            new Dipendente("Luigi", "Verdi", "VRDLGU80A01F205A", 2500),
+            new Dipendente("Anna", "Bianchi", "BNCNNA80A01F205A", 1800),
+            new Dipendente("Paolo", "Neri", "NREPLA80A01F205A", 2200)
+        };
+        
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH));
+            for (int i = 0; i < dipendenti.length; i++) {
+                Dipendente dipendente = dipendenti[i];
+                String linea = dipendente.getNome() + ";" + dipendente.getCognome() + ";" +
+                               dipendente.getCodiceFiscale() + ";" + dipendente.getStipendio();
+                writer.write(linea);
+                writer.newLine();
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.err.println("Errore durante la scrittura del file: " + e.getMessage());
+        }
+        
+        System.out.println(" Aggiungere un dipendente ? ");
+        System.out.println(" 1- Si");
+        System.out.println(" 2- No");
+        System.out.println(" 3- Visualizza L'Array Di Dipendenti");
+        System.out.println(" 0- Esci Dal Programma");
+        int scelta = scanner.nextInt();
+        
+        if (scelta == 1)
+        {
+        Dipendente nuovoDipendente = inserisciNuovoDipendente();
+        aggiungiDipendenteSuFile(nuovoDipendente);
+        }
+        
+        if (scelta == 2)
+        {
+        	System.out.println("Grazie per avere usato il programma....");
+        }
+        
+        if (scelta == 3)
+        {
+        	FileReader f;
+            f=new FileReader(FILE_PATH);
+            BufferedReader b;
+            b=new BufferedReader(f);
+            String s;
+            while(true) {
+              s=b.readLine();
+              if(s==null)
+                break;
+              System.out.println(s);
+            }
+         }
+        	
+        if(scelta == 0)
+        {
+        	System.out.println("Grazie per avere usato il programma....");
+        }
+        
+    }
+
+    private static Dipendente inserisciNuovoDipendente() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Inserisci il nome del nuovo dipendente: ");
+        String nome = scanner.nextLine();
+        System.out.print("Inserisci il cognome del nuovo dipendente: ");
+        String cognome = scanner.nextLine();
+        System.out.print("Inserisci il codice fiscale del nuovo dipendente: ");
+        String codiceFiscale = scanner.nextLine();
+        System.out.print("Inserisci lo stipendio del nuovo dipendente: ");
+        double stipendio = scanner.nextDouble();
+
+        return new Dipendente(nome, cognome, codiceFiscale, stipendio);
+    }
+
+    private static void aggiungiDipendenteSuFile(Dipendente dipendente) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true));
+            String linea = dipendente.getNome() + ";" + dipendente.getCognome() + ";" +
+                           dipendente.getCodiceFiscale() + ";" + dipendente.getStipendio();
+            writer.write(linea);
+            writer.newLine();
+            writer.close();
+        } catch (IOException e) {
+            System.err.println("Errore durante la scrittura del file: " + e.getMessage());
+        }
+    }
+}
